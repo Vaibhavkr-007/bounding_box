@@ -3,23 +3,23 @@ FROM python:3.10
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    libgl1-mesa-glx \
+    libgtk2.0-dev \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip 
-
-COPY . /code 
+RUN pip install --upgrade pip
 
 WORKDIR /code
 
-RUN chmod +x /code
+COPY . /code
 
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN pip install --no-cache-dir ultralytics flask opencv-python
 
 EXPOSE 8005
 
 ENV PYTHONPATH "${PYTHONPATH}:/code"
 
-CMD pip install -e .
-
-CMD ["python", "webb\app.py"]
-
+CMD ["python", "webb/app.py"]
