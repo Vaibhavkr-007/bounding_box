@@ -48,7 +48,7 @@ def predict():
 
         # Draw bounding boxes on the image
         for result in results[0].boxes:
-            box = result.xyxy[0].cpu().numpy()  # Get the bounding box coordinates
+            box = result.xyxy[0].cpu().numpy()  
             cls = int(result.cls[0])  # Get the class index
             label = model.names[cls]  # Get the class name
             if label == 'person':
