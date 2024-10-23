@@ -2,11 +2,18 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 from ultralytics import YOLO
 import os
 import cv2
+from pathlib import Path
+import sys
 
 app = Flask(__name__)
 
+PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent
+sys.path.append(str(PACKAGE_ROOT))
+
+model_path = PACKAGE_ROOT / "trained_model" / "best.pt"
+
 # Load the trained YOLOv8 model (ensure this is your .pt file)
-model = YOLO(r"trained_model\best.pt")
+model = YOLO(model_path)
 
 # Set up a folder to store uploaded images
 UPLOAD_FOLDER = 'uploads'
