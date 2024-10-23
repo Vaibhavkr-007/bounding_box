@@ -105,7 +105,3 @@ jobs:
 
             docker run -d -p 8005:8005 --name mlapp ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mlapp:latest
           EOF
-
-        # Clean up the SSH key after deployment
-        post-run: |
-          rm -f /tmp/ec2-key.pem
