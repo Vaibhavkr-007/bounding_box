@@ -93,17 +93,24 @@ jobs:
       # Deploy the Docker image to AWS EC2 (or ECS, or Elastic Beanstalk)
       - name: Deploy to AWS EC2
         run: |
+          # Save the SSH private key from GitHub Secrets
           echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/ec2-key.pem
           chmod 600 /tmp/ec2-key.pem
+
+          # SSH into the EC2 instance and run the deployment commands
           ssh -i /tmp/ec2-key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << EOF
+            # Authenticate Docker to AWS ECR
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
             
+            # Pull the latest Docker image from ECR
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mlapp:latest
             
-            if [ \$(docker ps -q -f name=mlapp) ]; then
-              docker stop mlapp
-              docker rm mlapp
+            # Check if a container with the name 'mlapp' exists (whether running or stopped) and remove it
+            if [ \$(docker ps -aq -f name=mlapp) ]; then
+              docker stop mlapp || true
+              docker rm mlapp || true
             fi
 
+            # Run the latest Docker image
             docker run -d -p 8005:8005 --name mlapp ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mlapp:latest
           EOF
