@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,27 +12,6 @@
     <br>
     <a href="/">Upload another image</a>
 </body>
-</html> -->
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prediction Result</title>
-</head>
-<body>
-    <h1>Prediction Result</h1>
-    <p>Number of people detected: {{ people_count }}</p>
-
-    <!-- Display the predicted image -->
-    <h2>Predicted Image:</h2>
-    <img src="{{ url_for('uploaded_file', filename=image_file) }}" alt="Predicted Image">
-
-    <!-- Link back to the upload page -->
-    <br><br>
-    <a href="/">Upload another image</a>
-</body>
 </html>
+
+
