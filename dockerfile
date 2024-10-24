@@ -1,21 +1,17 @@
-FROM python:3.10
+FROM python:3.10-slim
 
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN pip install --upgrade pip
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 WORKDIR /code
 
-COPY requirements.txt /code/
-
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /code
+COPY . .
 
 EXPOSE 8005
-
-ENV PYTHONPATH "${PYTHONPATH}:/code"
 
 CMD ["python", "webb/app.py"]
